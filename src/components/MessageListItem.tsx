@@ -1,39 +1,65 @@
-import { IonItem, IonLabel, IonNote } from "@ionic/react";
+import {
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonNote,
+} from "@ionic/react";
+import React from "react";
 import styled from "styled-components";
-import { Message } from "../data/messages";
+import { Note } from "../data/notes";
 import "./MessageListItem.css";
 
-let StyledIonItem = styled(IonItem)`
-  --padding-start: 0;
-  --inner-padding-end: 0;
+let ListText = styled.p`
+  overflow: hidden;
+  max-width: 75ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 interface MessageListItemProps {
-  message: Message;
+  note: Note;
+  deleteNote: (id: string) => void;
 }
 
-const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
+const MessageListItem: React.FC<MessageListItemProps> = ({
+  note,
+  deleteNote,
+}) => {
+  let displayDate = new Date(note.updated_at || (note.created_at as number));
+
+  function isDateBeforeToday(date: Date) {
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+  }
+
+  let timestamp = isDateBeforeToday(displayDate)
+    ? `${displayDate.toLocaleDateString()}`
+    : `${displayDate.toLocaleTimeString()}`;
+
   return (
-    <IonItem routerLink={`/message/${message.id}`} detail={false} lines="full">
-      <IonLabel className="ion-text-wrap">
-        <h2>
-          {message.fromName}
-          <span className="date">
-            <IonNote>{message.date}</IonNote>
-          </span>
-        </h2>
-        <h3>{message.subject}</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </IonLabel>
-    </IonItem>
+    <IonItemSliding>
+      <IonItem routerLink={`/message/${note.id}`} detail={false} lines="full">
+        <IonLabel className="ion-text-wrap">
+          <h2>
+            {note.title ?? "Untitled"}
+            <span className="date">
+              <IonNote>{timestamp}</IonNote>
+            </span>
+          </h2>
+          <ListText>{note.text ?? "Empty note"}</ListText>
+        </IonLabel>
+      </IonItem>
+      <IonItemOptions side="end" onIonSwipe={() => deleteNote(note.id)}>
+        <IonItemOption
+          color="danger"
+          expandable
+          onClick={() => deleteNote(note.id)}
+        >
+          Delete
+        </IonItemOption>
+      </IonItemOptions>
+    </IonItemSliding>
   );
 };
 

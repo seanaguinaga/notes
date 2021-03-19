@@ -12,13 +12,13 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import { add, addSharp, createOutline } from "ionicons/icons";
-import React, { useState } from "react";
+import React from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import MessageListItem from "../components/MessageListItem";
-import { getMessages, Message } from "../data/messages";
+import { Note } from "../data/notes";
 import { media } from "../styles/media";
 import "./Home.css";
 
@@ -59,14 +59,12 @@ let StyledIonFooter = styled(IonFooter)`
   }
 `;
 
-const Home: React.FC<{}> = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
-
+const Home: React.FC<{
+  notes: Note[];
+  deleteNote: (id: string) => void;
+  createNote: (note: Note) => void;
+}> = ({ notes, deleteNote, createNote }) => {
+  let history = useHistory();
   return (
     <IonPage id="home-page">
       <IonHeader>
@@ -85,8 +83,12 @@ const Home: React.FC<{}> = () => {
           </IonToolbar>
         </IonHeader>
         <StyledIonlist>
-          {messages.map((m) => (
-            <MessageListItem key={m.id} message={m} />
+          {notes.map((note) => (
+            <MessageListItem
+              key={note.id}
+              note={note}
+              deleteNote={deleteNote}
+            />
           ))}
         </StyledIonlist>
       </IonContent>
@@ -98,7 +100,18 @@ const Home: React.FC<{}> = () => {
       <StyledIonFooter>
         <IonToolbar>
           <IonButtons slot="end">
-            <IonButton>
+            <IonButton
+              onClick={() => {
+                createNote({
+                  id: "9",
+                  title: null,
+                  text: null,
+                  created_at: Date.now(),
+                  updated_at: null,
+                });
+                history.push("/message/9");
+              }}
+            >
               <IonIcon icon={createOutline} />
             </IonButton>
           </IonButtons>
