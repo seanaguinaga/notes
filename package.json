@@ -15,8 +15,10 @@
     "@types/react-dom": "^17.0.2",
     "@types/react-router": "^5.1.12",
     "@types/react-router-dom": "^5.1.7",
+    "apollo": "^2.32.5",
     "babel-plugin-styled-components": "^1.12.0",
     "customize-cra": "^1.0.0",
+    "graphqurl": "^0.3.3",
     "ionicons": "^5.5.0",
     "magiql": "^0.0.9",
     "react": "^0.0.0-experimental-3fb11eed9",
@@ -46,7 +48,8 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "get-hasura-schema": "cd src/graphql && get-graphql-schema https://takehome.hasura.app/v1/graphql -H \"X-Hasura-Admin-Secret: fVbfdODqZa4B1uxdJ0fgVgt1lwqmKFicjNkSf6ZRviqig4g2h6SbS4mRCjb1mmFx\" --introspect > schema.graphql"
+    "get-hasura-schema": "cd src/graphql && get-graphql-schema https://notes-app.hasura.app/v1/graphql -H \"X-Hasura-Admin-Secret: LJdzptnXkdnupwp0ux8LHQi8bG3EMoPaYv6qXq0Uot5t1roSG0I2msvj0o4xYG5l\" --introspect > schema.graphql",
+    "gq-hasura-schema": "cd src/graphql && gq https://takehome.hasura.app/v1/graphql -H \"X-Hasura-Admin-Secret: fVbfdODqZa4B1uxdJ0fgVgt1lwqmKFicjNkSf6ZRviqig4g2h6SbS4mRCjb1mmFx\" --introspect > schema.graphql"
   },
   "eslintConfig": {
     "extends": [

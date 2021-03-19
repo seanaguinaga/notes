@@ -9,15 +9,16 @@ import {
   IonIcon,
   IonLabel,
   IonList,
+  IonLoading,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { add, addSharp, createOutline } from "ionicons/icons";
-import React from "react";
+import React, { Suspense } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
-import MessageListItem from "../components/MessageListItem";
+import NotesList from "../components/NotesList";
 import { Note } from "../data/notes";
 import { media } from "../styles/media";
 import "./Home.css";
@@ -70,7 +71,20 @@ const Home: React.FC<{
       <IonHeader>
         <IonToolbar>
           <IonTitle>Notes</IonTitle>
-          <NonMobileIonButton slot="end" fill="clear">
+          <NonMobileIonButton
+            onClick={() => {
+              createNote({
+                id: "12",
+                title: null,
+                text: null,
+                created_at: Date.now(),
+                updated_at: null,
+              });
+              history.push("/message/12");
+            }}
+            slot="end"
+            fill="clear"
+          >
             <IonIcon slot="start" icon={addSharp} />
             <IonLabel>Create</IonLabel>
           </NonMobileIonButton>
@@ -82,7 +96,10 @@ const Home: React.FC<{
             <IonTitle size="large">Notes</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <StyledIonlist>
+        <Suspense fallback={<IonLoading isOpen />}>
+          <NotesList deleteNote={deleteNote} />
+        </Suspense>
+        {/* <StyledIonlist>
           {notes.map((note) => (
             <MessageListItem
               key={note.id}
@@ -90,10 +107,21 @@ const Home: React.FC<{
               deleteNote={deleteNote}
             />
           ))}
-        </StyledIonlist>
+        </StyledIonlist> */}
       </IonContent>
       <MobileIonFab horizontal="end" vertical="bottom">
-        <IonFabButton>
+        <IonFabButton
+          onClick={() => {
+            createNote({
+              id: "12",
+              title: null,
+              text: null,
+              created_at: Date.now(),
+              updated_at: null,
+            });
+            history.push("/message/12");
+          }}
+        >
           <IonIcon ios={addSharp} md={add} />
         </IonFabButton>
       </MobileIonFab>

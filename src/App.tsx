@@ -15,6 +15,7 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
 import { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { HasuraProvider } from "./components/HasuraProvider";
 import { getNotes, Note } from "./data/notes";
 import Home from "./pages/Home";
@@ -47,33 +48,35 @@ const App: React.FC = () => {
 
   return (
     <HasuraProvider>
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route path="/" exact={true}>
-              <Redirect to="/home" />
-            </Route>
-            <Route
-              path="/home"
-              render={() => (
-                <Home
+      <ErrorBoundary>
+        <IonApp>
+          <IonReactRouter>
+            <IonRouterOutlet>
+              <Route path="/" exact={true}>
+                <Redirect to="/home" />
+              </Route>
+              <Route
+                path="/home"
+                render={() => (
+                  <Home
+                    deleteNote={deleteNote}
+                    createNote={createNote}
+                    notes={notes}
+                  />
+                )}
+                exact={true}
+              />
+              <Route path="/message/:id">
+                <ViewMessage
                   deleteNote={deleteNote}
                   createNote={createNote}
-                  notes={notes}
+                  getNote={getNote}
                 />
-              )}
-              exact={true}
-            />
-            <Route path="/message/:id">
-              <ViewMessage
-                deleteNote={deleteNote}
-                createNote={createNote}
-                getNote={getNote}
-              />
-            </Route>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
+              </Route>
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </IonApp>
+      </ErrorBoundary>
     </HasuraProvider>
   );
 };
