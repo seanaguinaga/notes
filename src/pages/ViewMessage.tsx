@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Message, getMessage } from '../data/messages';
 import {
   IonBackButton,
   IonButtons,
@@ -8,14 +6,23 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonList,
   IonNote,
   IonPage,
   IonToolbar,
   useIonViewWillEnter,
-} from '@ionic/react';
-import { personCircle } from 'ionicons/icons';
-import { useParams } from 'react-router';
-import './ViewMessage.css';
+} from "@ionic/react";
+import { personCircle } from "ionicons/icons";
+import { useState } from "react";
+import { useParams } from "react-router";
+import styled from "styled-components";
+import { getMessage, Message } from "../data/messages";
+import "./ViewMessage.css";
+
+let StyledIonlist = styled(IonList)`
+  margin: auto;
+  max-width: 1024px;
+`;
 
 function ViewMessage() {
   const [message, setMessage] = useState<Message>();
@@ -31,15 +38,14 @@ function ViewMessage() {
       <IonHeader translucent>
         <IonToolbar>
           <IonButtons>
-            <IonBackButton text="Inbox" defaultHref="/home"></IonBackButton>
+            <IonBackButton text="Notes" defaultHref="/home"></IonBackButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-
       <IonContent fullscreen>
         {message ? (
-          <>
-            <IonItem>
+          <StyledIonlist>
+            <IonItem lines="none">
               <IonIcon icon={personCircle} color="primary"></IonIcon>
               <IonLabel className="ion-text-wrap">
                 <h2>
@@ -53,7 +59,6 @@ function ViewMessage() {
                 </h3>
               </IonLabel>
             </IonItem>
-
             <div className="ion-padding">
               <h1>{message.subject}</h1>
               <p>
@@ -66,7 +71,7 @@ function ViewMessage() {
                 sunt in culpa qui officia deserunt mollit anim id est laborum.
               </p>
             </div>
-          </>
+          </StyledIonlist>
         ) : (
           <div>Message not found</div>
         )}

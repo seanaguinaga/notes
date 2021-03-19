@@ -1,0 +1,41 @@
+.header-ios ion-toolbar:last-of-type {
+  --border-width: 0 0 1px;
+}
+
+ion-content .header-ios ion-toolbar:last-child {
+  --border-width: 0;
+}
+
+ion-content ion-toolbar {
+  max-width: 1024px;
+  margin: auto;
+}
+
+ion-header.md {
+  background: var(--ion-toolbar-background);
+}
+
+ion-toolbar.md {
+  max-width: 1024px;
+  margin: auto;
+}
+
+ion-footer.ios {
+  border-top: 1px solid
+    var(
+      --ion-toolbar-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.2)))
+    );
+  background: var(--ion-toolbar-background, var(--ion-color-step-50, #fff));
+}
+
+ion-footer ion-toolbar {
+  --border-width: 0 !important;
+  max-width: 1024px;
+  margin: auto;
+}
+
+ion-buttons {
+  max-width: 1024px;
+  margin: auto;
+}
