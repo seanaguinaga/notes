@@ -70,7 +70,20 @@ const Home: React.FC<{
       <IonHeader>
         <IonToolbar>
           <IonTitle>Notes</IonTitle>
-          <NonMobileIonButton slot="end" fill="clear">
+          <NonMobileIonButton
+            onClick={() => {
+              createNote({
+                id: "12",
+                title: null,
+                text: null,
+                created_at: Date.now(),
+                updated_at: null,
+              });
+              history.push("/message/12");
+            }}
+            slot="end"
+            fill="clear"
+          >
             <IonIcon slot="start" icon={addSharp} />
             <IonLabel>Create</IonLabel>
           </NonMobileIonButton>
@@ -93,7 +106,18 @@ const Home: React.FC<{
         </StyledIonlist>
       </IonContent>
       <MobileIonFab horizontal="end" vertical="bottom">
-        <IonFabButton>
+        <IonFabButton
+          onClick={() => {
+            createNote({
+              id: "12",
+              title: null,
+              text: null,
+              created_at: Date.now(),
+              updated_at: null,
+            });
+            history.push("/message/12");
+          }}
+        >
           <IonIcon ios={addSharp} md={add} />
         </IonFabButton>
       </MobileIonFab>
@@ -103,13 +127,13 @@ const Home: React.FC<{
             <IonButton
               onClick={() => {
                 createNote({
-                  id: "9",
+                  id: "12",
                   title: null,
                   text: null,
                   created_at: Date.now(),
                   updated_at: null,
                 });
-                history.push("/message/9");
+                history.push("/message/12");
               }}
             >
               <IonIcon icon={createOutline} />

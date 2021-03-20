@@ -1,4 +1,5 @@
 import {
+  IonActionSheet,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -16,7 +17,13 @@ import {
   IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import { add, addSharp, createOutline, trashOutline } from "ionicons/icons";
+import {
+  add,
+  addSharp,
+  createOutline,
+  ellipsisHorizontalCircleOutline,
+  ellipsisVerticalSharp,
+} from "ionicons/icons";
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
@@ -58,6 +65,28 @@ let TitleInput = styled(IonInput)`
   font-weight: 700;
 `;
 
+let MobileAndIosButton = styled(IonButton)`
+  .md {
+    ${media.sm`
+      display: none;
+    `}
+  }
+`;
+
+let NonMobileIonButtons = styled(IonButtons)`
+  .ios {
+    display: none;
+  }
+
+  .md {
+    display: none;
+
+    ${media.sm`
+      display: block;
+    `}
+  }
+`;
+
 const ViewMessage: React.FC<{
   deleteNote: (id: string) => void;
   createNote: (note: Note) => void;
@@ -83,6 +112,7 @@ const ViewMessage: React.FC<{
 
   let history = useHistory();
 
+  const [showActionSheet, setShowActionSheet] = useState(false);
   return (
     <IonPage id="view-message-page">
       <IonHeader translucent>
@@ -90,17 +120,60 @@ const ViewMessage: React.FC<{
           <IonButtons>
             <IonBackButton text="Notes" defaultHref="/home"></IonBackButton>
           </IonButtons>
-          <AndroidButton
-            onClick={() => {
-              deleteNote(params.id);
-              history.push("/");
-            }}
-            slot="end"
-            fill="clear"
-            color="danger"
-          >
-            <IonLabel>Delete</IonLabel>
-          </AndroidButton>
+          <IonButtons slot="end">
+            <MobileAndIosButton
+              onClick={() => setShowActionSheet(true)}
+              slot="end"
+              fill="clear"
+            >
+              <IonIcon
+                ios={ellipsisHorizontalCircleOutline}
+                md={ellipsisVerticalSharp}
+              />
+            </MobileAndIosButton>
+          </IonButtons>
+          <NonMobileIonButtons slot="end">
+            <IonButton
+              onClick={() => {
+                deleteNote(params.id);
+                if (history.length > 1) {
+                  history.goBack();
+                } else {
+                  history.replace("/home");
+                }
+              }}
+              color="danger"
+              fill="clear"
+            >
+              <IonLabel>Delete</IonLabel>
+            </IonButton>
+          </NonMobileIonButtons>
+
+          <IonActionSheet
+            isOpen={showActionSheet}
+            onDidDismiss={() => setShowActionSheet(false)}
+            buttons={[
+              {
+                text: "Delete",
+                role: "destructive",
+                handler: () => {
+                  deleteNote(params.id);
+                  if (history.length > 1) {
+                    history.goBack();
+                  } else {
+                    history.replace("/home");
+                  }
+                },
+              },
+              {
+                text: "Cancel",
+                role: "cancel",
+                handler: () => {
+                  console.log("Cancel clicked");
+                },
+              },
+            ]}
+          ></IonActionSheet>
         </IonToolbar>
       </IonHeader>
       <StyledIonContent fullscreen>
@@ -132,26 +205,23 @@ const ViewMessage: React.FC<{
         )}
       </StyledIonContent>
       <MobileIonFab horizontal="end" vertical="bottom">
-        <IonFabButton>
+        <IonFabButton
+          onClick={() => {
+            createNote({
+              id: "9",
+              title: null,
+              text: null,
+              created_at: Date.now(),
+              updated_at: null,
+            });
+            history.replace("/message/9");
+          }}
+        >
           <IonIcon ios={addSharp} md={add} />
         </IonFabButton>
       </MobileIonFab>
       <StyledIonFooter>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton
-              onClick={() => {
-                deleteNote(params.id);
-                if (history.length > 1) {
-                  history.goBack();
-                } else {
-                  history.replace("/home");
-                }
-              }}
-            >
-              <IonIcon color="danger" ios={trashOutline} />
-            </IonButton>
-          </IonButtons>
           <IonButtons slot="end">
             <IonButton
               onClick={() => {
