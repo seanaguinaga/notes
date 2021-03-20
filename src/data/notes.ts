@@ -2,8 +2,8 @@ export interface Note {
   id: string;
   title: string | null;
   text: string | null;
-  created_at: number | null | string;
-  updated_at: number | null | string;
+  created_at: number | null;
+  updated_at: number | null;
 }
 
 const notes: Note[] = [

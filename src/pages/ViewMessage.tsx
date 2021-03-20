@@ -1,5 +1,4 @@
 import {
-  IonActionSheet,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -9,22 +8,18 @@ import {
   IonFooter,
   IonHeader,
   IonIcon,
+  IonInput,
+  IonItem,
   IonLabel,
-  IonLoading,
+  IonList,
   IonPage,
+  IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import {
-  add,
-  addSharp,
-  createOutline,
-  ellipsisHorizontalCircleOutline,
-  ellipsisVerticalSharp,
-} from "ionicons/icons";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import { add, addSharp, createOutline, trashOutline } from "ionicons/icons";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
-import NoteDetail from "../components/NoteDetail";
 import { Note } from "../data/notes";
 import { media } from "../styles/media";
 import "./ViewMessage.css";
@@ -34,17 +29,9 @@ let StyledIonContent = styled(IonContent)`
   max-width: 1024px;
 `;
 
-let NonMobileIonButtons = styled(IonButtons)`
+let AndroidButton = styled(IonButton)`
   .ios {
     display: none;
-  }
-
-  .md {
-    display: none;
-
-    ${media.sm`
-      display: block;
-    `}
   }
 `;
 
@@ -66,12 +53,9 @@ let MobileIonFab = styled(IonFab)`
   }
 `;
 
-let MobileAndIosButton = styled(IonButton)`
-  .md {
-    ${media.sm`
-      display: none;
-    `}
-  }
+let TitleInput = styled(IonInput)`
+  font-size: 22px;
+  font-weight: 700;
 `;
 
 const ViewMessage: React.FC<{
@@ -99,8 +83,6 @@ const ViewMessage: React.FC<{
 
   let history = useHistory();
 
-  const [showActionSheet, setShowActionSheet] = useState(false);
-
   return (
     <IonPage id="view-message-page">
       <IonHeader translucent>
@@ -108,67 +90,21 @@ const ViewMessage: React.FC<{
           <IonButtons>
             <IonBackButton text="Notes" defaultHref="/home"></IonBackButton>
           </IonButtons>
-          <IonButtons slot="end">
-            <MobileAndIosButton
-              onClick={() => setShowActionSheet(true)}
-              slot="end"
-              fill="clear"
-            >
-              <IonIcon
-                ios={ellipsisHorizontalCircleOutline}
-                md={ellipsisVerticalSharp}
-              />
-            </MobileAndIosButton>
-          </IonButtons>
-          <NonMobileIonButtons slot="end">
-            <IonButton
-              onClick={() => {
-                deleteNote(params.id);
-                if (history.length > 1) {
-                  history.goBack();
-                } else {
-                  history.replace("/home");
-                }
-              }}
-              color="danger"
-              fill="clear"
-            >
-              <IonLabel>Delete</IonLabel>
-            </IonButton>
-          </NonMobileIonButtons>
-          <IonActionSheet
-            isOpen={showActionSheet}
-            onDidDismiss={() => setShowActionSheet(false)}
-            buttons={[
-              {
-                text: "Delete",
-                role: "destructive",
-                handler: () => {
-                  deleteNote(params.id);
-                  if (history.length > 1) {
-                    history.goBack();
-                  } else {
-                    history.replace("/home");
-                  }
-                },
-              },
-
-              {
-                text: "Cancel",
-                role: "cancel",
-                handler: () => {
-                  console.log("Cancel clicked");
-                },
-              },
-            ]}
-          ></IonActionSheet>
+          <AndroidButton
+            onClick={() => {
+              deleteNote(params.id);
+              history.push("/");
+            }}
+            slot="end"
+            fill="clear"
+            color="danger"
+          >
+            <IonLabel>Delete</IonLabel>
+          </AndroidButton>
         </IonToolbar>
       </IonHeader>
       <StyledIonContent fullscreen>
-        <Suspense fallback={<IonLoading isOpen />}>
-          <NoteDetail id={params.id} />
-        </Suspense>
-        {/* {note ? (
+        {note ? (
           <IonList>
             <IonItem lines="none">
               <TitleInput
@@ -193,7 +129,7 @@ const ViewMessage: React.FC<{
           </IonList>
         ) : (
           <div>Message not found</div>
-        )} */}
+        )}
       </StyledIonContent>
       <MobileIonFab horizontal="end" vertical="bottom">
         <IonFabButton>
@@ -202,6 +138,20 @@ const ViewMessage: React.FC<{
       </MobileIonFab>
       <StyledIonFooter>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              onClick={() => {
+                deleteNote(params.id);
+                if (history.length > 1) {
+                  history.goBack();
+                } else {
+                  history.replace("/home");
+                }
+              }}
+            >
+              <IonIcon color="danger" ios={trashOutline} />
+            </IonButton>
+          </IonButtons>
           <IonButtons slot="end">
             <IonButton
               onClick={() => {
