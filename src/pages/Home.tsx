@@ -12,7 +12,7 @@ import {
   IonLoading,
   IonPage,
   IonTitle,
-  IonToolbar,
+  IonToolbar
 } from "@ionic/react";
 import { add, addSharp, createOutline } from "ionicons/icons";
 import React, { Suspense } from "react";
@@ -100,7 +100,9 @@ const Home: React.FC<{
         </IonHeader>
         <StyledIonlist>
           <Suspense fallback={<IonLoading isOpen />}>
-            <NotesList />
+            <NotesList
+              // @ts-expect-error
+              queryRef={notes} />
           </Suspense>
           {notes.map((note) => (
             <MessageListItem
