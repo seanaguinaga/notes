@@ -15,7 +15,6 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
 import { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { HasuraProvider } from "./components/HasuraProvider";
 import { getNotes, Note } from "./data/notes";
 import Home from "./pages/Home";
 import ViewMessage from "./pages/ViewMessage";
@@ -46,35 +45,33 @@ const App: React.FC = () => {
   };
 
   return (
-    <HasuraProvider>
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route path="/" exact={true}>
-              <Redirect to="/home" />
-            </Route>
-            <Route
-              path="/home"
-              render={() => (
-                <Home
-                  deleteNote={deleteNote}
-                  createNote={createNote}
-                  notes={notes}
-                />
-              )}
-              exact={true}
-            />
-            <Route path="/message/:id">
-              <ViewMessage
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path="/" exact={true}>
+            <Redirect to="/home" />
+          </Route>
+          <Route
+            path="/home"
+            render={() => (
+              <Home
                 deleteNote={deleteNote}
                 createNote={createNote}
-                getNote={getNote}
+                notes={notes}
               />
-            </Route>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
-    </HasuraProvider>
+            )}
+            exact={true}
+          />
+          <Route path="/message/:id">
+            <ViewMessage
+              deleteNote={deleteNote}
+              createNote={createNote}
+              getNote={getNote}
+            />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
   );
 };
 

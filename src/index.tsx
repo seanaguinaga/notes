@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { RelayEnvironmentProvider } from "react-relay/hooks";
 import App from "./App";
+import RelayEnvironment from "./components/RelayEnvironment";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 ReactDOM.unstable_createRoot(
   document.getElementById("root") as HTMLElement
 ).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <RelayEnvironmentProvider environment={RelayEnvironment}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </RelayEnvironmentProvider>
 );
 
 // If you want your app to work offline and load faster, you can change

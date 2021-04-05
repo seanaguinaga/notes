@@ -9,15 +9,17 @@ import {
   IonIcon,
   IonLabel,
   IonList,
+  IonLoading,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { add, addSharp, createOutline } from "ionicons/icons";
-import React from "react";
+import React, { Suspense } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import MessageListItem from "../components/MessageListItem";
+import NotesList from "../components/NotesList";
 import { Note } from "../data/notes";
 import { media } from "../styles/media";
 import "./Home.css";
@@ -65,6 +67,7 @@ const Home: React.FC<{
   createNote: (note: Note) => void;
 }> = ({ notes, deleteNote, createNote }) => {
   let history = useHistory();
+
   return (
     <IonPage id="home-page">
       <IonHeader>
@@ -96,6 +99,9 @@ const Home: React.FC<{
           </IonToolbar>
         </IonHeader>
         <StyledIonlist>
+          <Suspense fallback={<IonLoading isOpen />}>
+            <NotesList />
+          </Suspense>
           {notes.map((note) => (
             <MessageListItem
               key={note.id}
